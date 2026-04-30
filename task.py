@@ -24,16 +24,16 @@ class Task:
         }
         return data
     
-    @staticmethod #No usamos self aqui, por eso ponemos esto
+    @staticmethod
     def from_dict(data):
         return Task(
-        data["id_tarea"],
-        data["nombre"],
-        data["descripcion"],
-        data["activa"],
-        data["id_estado"],
-        data["id_categoria"]
-    )
+            data[0],  # id_tarea
+            data[1],  # nombre
+            data[2],  # descripcion
+            data[3],  # activa
+            data[4],  # id_estado
+            data[5]   # id_categoria
+        )
         
 
 

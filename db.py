@@ -30,17 +30,38 @@ class Db:
     
 
         #Hacer la consulta bompleta
-    def fetch_all(consulta):
+def fetch_all(query, params=None):
 
-        conexion = get_connection()
-        #abrir la conexion y tenerla estable
-        cursor = conexion.cursor()
-        cursor.execute(consulta)
-        r = cursor.fetchall()
-        #hacer la consulta y traerla
-        cursor.close()
-        conexion.close()
-        #cerrar todo
-        return r
+    conexion = get_connection()
+    cursor = conexion.cursor()
+
+    if params is None:
+        cursor.execute(query)
+    else:
+        cursor.execute(query, params)
+
+    dato = cursor.fetchall()
+    cursor.close()
+    conexion.close()
+
+    return dato
+
+
+def execute_write(query, params=None):
+
+    conexion = get_connection()
+    cursor = conexion.cursor()
+
+    if params is None:
+        cursor.execute(query)
+    else:
+        cursor.execute(query, params)
+
+    conexion.commit()
+    affected = cursor.rowcount
+    cursor.close()
+    conexion.close()
+
+    return affected
     
 
