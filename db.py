@@ -54,4 +54,24 @@ class Db:
         conexion.close()
 
         return affected
+    
+    @staticmethod
+    def execute_read(query, params=None, fetchone=False):
+        conexion = Db.get_connection()
+        cursor = conexion.cursor()
+
+        if params is None:
+            cursor.execute(query)
+        else:
+            cursor.execute(query, params)
+
+        if fetchone:
+            resultado = cursor.fetchone()
+        else:
+            resultado = cursor.fetchall()
+
+        cursor.close()
+        conexion.close()
+
+        return resultado
 
