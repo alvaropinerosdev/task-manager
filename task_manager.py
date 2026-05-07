@@ -44,3 +44,22 @@ class TaskManager:
                 params = (id_tarea,)
                 Db.execute_write(query, params)
                 return True
+    def update(self, id_tarea, nombre="", descripcion="", activa="", id_estado="", id_categoria=""):
+
+        data = self.get_by_id(id_tarea)
+
+        if data is None:
+            return "Task does not exist."
+
+        query = """ UPDATE tareas SET nombre = %s, descripcion = %s, activa = %s, id_estado = %s, id_categoria = %s WHERE id_tarea = %s"""
+
+        params = (
+            nombre if nombre != "" else data.nombre,
+            descripcion if descripcion != "" else data.descripcion,
+            activa if activa != "" else data.activa,
+            id_estado if id_estado != "" else data.id_estado,
+            id_categoria if id_categoria != "" else data.id_categoria,
+            id_tarea
+        )
+
+        return Db.execute_write(query, params)
