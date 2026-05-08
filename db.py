@@ -19,59 +19,97 @@ class Db:
 
 
     @staticmethod
-    def fetch_all(query, params=None):
+    def fetch_all(query, params=None, cursor=None, conexion=None ):
 
         conexion = Db.get_connection()
+        if conexion is None:
+            return None
+            
         cursor = conexion.cursor()
+        
+        try:
 
-        if params is None:
-            cursor.execute(query)
-        else:
-            cursor.execute(query, params)
+            if params is None:
+                cursor.execute(query)
+            else:
+                cursor.execute(query, params)
 
-        dato = cursor.fetchall()
-        cursor.close()
-        conexion.close()
+            return cursor.fetchall()
+            
 
-        return dato
+        except Error as tipo_error:
+            print(f"Error en conexion: {tipo_error}")
+            return None
+
+        finally:
+            if cursor is not None:
+                cursor.close()
+            
+            if conexion:
+                conexion.close()
+
 
 
     @staticmethod
-    def execute_write(query, params=None):
+    def execute_write(query, params=None, cursor= None, conexion= None):
 
         conexion = Db.get_connection()
+
+        if conexion is None:
+            return None
+        
         cursor = conexion.cursor()
 
-        if params is None:
-            cursor.execute(query)
-        else:
-            cursor.execute(query, params)
+        try:
+            if params is None:
+                cursor.execute(query)
+            else:
+                cursor.execute(query, params)
 
-        conexion.commit()
-        affected = cursor.rowcount
+            conexion.commit()
 
-        cursor.close()
-        conexion.close()
+            affected = cursor.rowcount
 
-        return affected
+            return affected
+
+        except Error as tipo_error:
+            print(f"Error en conexion: {tipo_error}")
+            return None
+        
+        finally:
+            if cursor is not None:
+                cursor.close()
+            if conexion:
+                conexion.close()
+
+        
     
     @staticmethod
-    def execute_read(query, params=None, fetchone=False):
+    def execute_read(query, params=None, fetchone=False, cursor=None, conexion=None):
+
         conexion = Db.get_connection()
+
+        if conexion is None:
+            return None
+        
         cursor = conexion.cursor()
 
-        if params is None:
-            cursor.execute(query)
-        else:
-            cursor.execute(query, params)
+            
+        try:
+            if params is None:
+                cursor.execute(query)
+            else:
+                cursor.execute(query, params)
 
-        if fetchone:
-            resultado = cursor.fetchone()
-        else:
-            resultado = cursor.fetchall()
+            if fetchone:
+                return cursor.fetchone()
 
-        cursor.close()
-        conexion.close()
+            else:
+                return cursor.fetchall()
 
-        return resultado
-
+            
+        finally:
+            if cursor is not None:
+                    cursor.close()
+            if conexion:
+                conexion.close()
