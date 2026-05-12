@@ -15,7 +15,7 @@ This is my first personal project, developed with the goal of learning and stren
 Under development 🚧  
 
 ## Database
-The project includes a `gestor_de_tareas.sql` file with the necessary instructions to create the database and its tables in MySQL.
+The project includes a `task_manager.sql` file with the necessary instructions to create the database and its tables in MySQL.
 
 ## Objective
 Build a functional task manager by applying good practices such as:
