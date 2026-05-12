@@ -1,28 +1,28 @@
-# Gestor de Tareas
+# Task Manager
 
-**Proyecto:** Mi primer proyecto  
-**Fecha de inicio:** 28 de abril de 2026  
+**Project:** My First Project  
+**Start Date:** April 28, 2026  
 
-## Descripción
-Este es mi primer proyecto personal desarrollado con el objetivo de aprender y fortalecer mis conocimientos en programación. A través de este proyecto busco mejorar mi lógica, la organización del código y el uso de herramientas reales de desarrollo.
+## Description
+This is my first personal project, developed with the goal of learning and strengthening my programming skills. Through this project, I aim to improve my logic, code organization, and the use of real development tools.
 
-## Tecnologías
+## Technologies
 - Python  
 - MySQL  
-- Git y GitHub  
+- Git and GitHub  
 
-## Estado
-En desarrollo 🚧  
+## Status
+Under development 🚧  
 
-## Base de datos
-El proyecto incluye un archivo `gestor_de_tareas.sql` con las instrucciones necesarias para crear la base de datos y sus tablas en MySQL.
+## Database
+The project includes a `gestor_de_tareas.sql` file with the necessary instructions to create the database and its tables in MySQL.
 
-## Objetivo
-Construir un gestor de tareas funcional aplicando buenas prácticas como:
-- Programación orientada a objetos (POO)
-- Manejo de errores
-- Organización modular del código
-- Uso correcto de Git
+## Objective
+Build a functional task manager by applying good practices such as:
+- Object-oriented programming (OOP)
+- Error handling
+- Modular code organization
+- Proper use of Git
 
-## Notas
-Este proyecto está en constante mejora y evolución como parte de mi proceso de aprendizaje.
+## Notes
+This project is constantly improving and evolving as part of my learning process.
