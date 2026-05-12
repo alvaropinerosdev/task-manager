@@ -25,7 +25,8 @@ class TaskManager:
         return task
     
     def add(self, nombre, descripcion, activa, id_estado, id_categoria):
-        if nombre is None:
+        nombre.strip()
+        if nombre is None or "":
             return None
         else:
             query = "INSERT INTO tareas (nombre, descripcion, activa, id_estado, id_categoria) VALUES (%s, %s, %s, %s, %s)"
@@ -44,6 +45,7 @@ class TaskManager:
                 params = (id_tarea,)
                 Db.execute_write(query, params)
                 return True
+            
     def update(self, id_tarea, nombre="", descripcion="", activa="", id_estado="", id_categoria=""):
 
         data = self.get_by_id(id_tarea)
