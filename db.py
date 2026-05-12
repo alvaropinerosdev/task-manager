@@ -10,7 +10,7 @@ class Db:
                 host="localhost",
                 user="root",
                 password="root",
-                database="proyecto_1"
+                database="gestor_de_tareas"
             )
             return connection
         except Error as tipo_error:

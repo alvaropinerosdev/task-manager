@@ -65,12 +65,10 @@ CREATE TABLE dias_repeticion (
     orden_semana INT,
     hora TIME,
 
-    -- evitar duplicados
     UNIQUE (id_repeticion, tipo_dia, valor, orden_semana, hora),
 
     FOREIGN KEY (id_repeticion) REFERENCES repeticiones(id_repeticion) ON DELETE CASCADE,
 
-    -- validaciones básicas
     CHECK (
         (tipo_dia = 'semana' AND valor BETWEEN 1 AND 7 AND orden_semana IS NULL)
         OR
@@ -90,7 +88,6 @@ CREATE TABLE eventos_tarea (
 
     FOREIGN KEY (id_tarea) REFERENCES tareas(id_tarea) ON DELETE CASCADE,
 
-    -- permitir múltiples fechas por tarea pero no duplicar el mismo día
     UNIQUE (id_tarea, fecha)
 );
 
@@ -108,3 +105,83 @@ ON tareas(id_estado);
 
 CREATE INDEX idx_tarea_categoria 
 ON tareas(id_categoria);
+
+-- =========================
+-- DATOS DE PRUEBA
+-- =========================
+
+-- ESTADOS
+INSERT INTO estados (nombre)
+VALUES
+('Pendiente'),
+('En progreso'),
+('Completada');
+
+-- CATEGORIAS
+INSERT INTO categorias (nombre)
+VALUES
+('Trabajo'),
+('Personal'),
+('Estudio'),
+('Salud');
+
+-- TAREAS
+INSERT INTO tareas (
+    nombre,
+    descripcion,
+    activa,
+    id_estado,
+    id_categoria
+)
+VALUES
+(
+    'Terminar CRUD',
+    'Realizar pruebas completas del CRUD de tareas',
+    1,
+    1,
+    1
+),
+(
+    'Aprender JOINs',
+    'Practicar INNER JOIN y LEFT JOIN en MySQL',
+    1,
+    2,
+    3
+),
+(
+    'Comprar despensa',
+    'Ir al supermercado por comida y productos de limpieza',
+    1,
+    1,
+    2
+),
+(
+    'Hacer ejercicio',
+    'Rutina de cardio y pesas durante 1 hora',
+    1,
+    1,
+    4
+),
+(
+    'Documentar proyecto',
+    'Crear documentación técnica del sistema',
+    1,
+    2,
+    1
+);
+
+-- =========================
+-- CONSULTA DE PRUEBA
+-- =========================
+SELECT 
+    t.id_tarea,
+    t.nombre,
+    t.descripcion,
+    t.activa,
+    e.nombre AS estado,
+    c.nombre AS categoria
+FROM tareas t
+INNER JOIN estados e 
+    ON t.id_estado = e.id_estado
+INNER JOIN categorias c 
+    ON t.id_categoria = c.id_categoria;
