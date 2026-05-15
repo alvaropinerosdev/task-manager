@@ -17,7 +17,7 @@ The project has been redesigned and restructured to achieve a cleaner architectu
 Under development 🚧  
 
 ## Project Refactor
-**Refactor Date:** May 13, 2026
+**Refactor Date:** May 13, 2026  
 
 The project architecture was redesigned to:
 
@@ -34,6 +34,11 @@ The following diagram represents the current architecture and design of the proj
 
 ![UML Diagram](Diagrama_UML_Task_Manager.png)
 
+## Entity-Relationship Diagram (ERD)
+This diagram represents the database structure, including tables, relationships, and constraints used in MySQL.
+
+![ERD Diagram](Diagrama_ERD_Task_Manager.png)
+
 ## Database
 The project includes a `task_manager.sql` file with the necessary instructions to create the database and its tables in MySQL.
 
@@ -44,7 +49,7 @@ Build a functional task manager by applying good practices such as:
 - Error handling
 - Modular code organization
 - Database design and normalization
-- Proper use of Git and GitHub
+- Proper use of Git and GitHub  
 
 ## Notes
 This project is constantly improving and evolving as part of my learning process. The current version reflects an important architectural refactor focused on writing cleaner, more scalable, and more maintainable code.

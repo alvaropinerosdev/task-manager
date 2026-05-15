@@ -1,187 +1,101 @@
-DROP DATABASE IF EXISTS gestor_de_tareas;
-CREATE DATABASE gestor_de_tareas;
-USE gestor_de_tareas;
-
--- =========================
--- ESTADOS
--- =========================
-CREATE TABLE estados (
-    id_estado INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    nombre VARCHAR(50) NOT NULL
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    phone VARCHAR(30)
 );
 
--- =========================
--- CATEGORIAS
--- =========================
-CREATE TABLE categorias (
-    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL
+
+CREATE TABLE status (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE
 );
 
--- =========================
--- TAREAS
--- =========================
-CREATE TABLE tareas (
-    id_tarea INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    descripcion TEXT,
 
-    activa TINYINT(1) DEFAULT 1,
-
-    id_estado INT NOT NULL,
-    id_categoria INT NOT NULL,
-
-    FOREIGN KEY (id_estado) REFERENCES estados(id_estado),
-    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+CREATE TABLE categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE
 );
 
--- =========================
--- REPETICIONES
--- =========================
-CREATE TABLE repeticiones (
-    id_repeticion INT AUTO_INCREMENT PRIMARY KEY,
-    id_tarea INT NOT NULL,
 
-    tipo ENUM('diaria', 'semanal', 'mensual') NOT NULL,
-    intervalo INT NOT NULL DEFAULT 1,
+CREATE TABLE tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title VARCHAR(150) NOT NULL,
+    description TEXT,
 
-    fecha_base DATE NOT NULL,
-    fecha_fin DATE NULL,
+    status_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
 
-    solo_laborales TINYINT(1) DEFAULT 0,
+    started_date DATE NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT 1,
 
-    FOREIGN KEY (id_tarea) REFERENCES tareas(id_tarea) ON DELETE CASCADE
+    FOREIGN KEY (status_id)
+        REFERENCES status(id),
+
+    FOREIGN KEY (category_id)
+        REFERENCES categories(id),
+
+    FOREIGN KEY (user_id)
+        REFERENCES users(id)
 );
 
--- =========================
--- DIAS REPETICION
--- =========================
-CREATE TABLE dias_repeticion (
-    id_dia_rep INT AUTO_INCREMENT PRIMARY KEY,
-    id_repeticion INT NOT NULL,
 
-    tipo_dia ENUM('semana', 'mes') NOT NULL,
-    valor INT,
-    orden_semana INT,
-    hora TIME,
+CREATE TABLE repeat_rules (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-    UNIQUE (id_repeticion, tipo_dia, valor, orden_semana, hora),
+    task_id INTEGER NOT NULL UNIQUE,
 
-    FOREIGN KEY (id_repeticion) REFERENCES repeticiones(id_repeticion) ON DELETE CASCADE,
+    active BOOLEAN NOT NULL DEFAULT 1,
+
+    frequency VARCHAR(20) NOT NULL,
+
+    interval INTEGER NOT NULL DEFAULT 1,
+
+    repeat_days TEXT,
+
+    FOREIGN KEY (task_id)
+        REFERENCES tasks(id),
 
     CHECK (
-        (tipo_dia = 'semana' AND valor BETWEEN 1 AND 7 AND orden_semana IS NULL)
-        OR
-        (tipo_dia = 'mes' AND valor BETWEEN 1 AND 31)
+        frequency IN (
+            'daily',
+            'weekly',
+            'monthly',
+            'yearly'
+        )
     )
 );
 
--- =========================
--- EVENTOS
--- =========================
-CREATE TABLE eventos_tarea (
-    id_evento INT AUTO_INCREMENT PRIMARY KEY,
-    id_tarea INT NOT NULL,
 
-    fecha DATE NOT NULL,
-    hora TIME,
+CREATE TABLE task_history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-    FOREIGN KEY (id_tarea) REFERENCES tareas(id_tarea) ON DELETE CASCADE,
+    task_id INTEGER NOT NULL,
 
-    UNIQUE (id_tarea, fecha)
+    date DATE NOT NULL,
+
+    completed BOOLEAN NOT NULL DEFAULT 0,
+
+    FOREIGN KEY (task_id)
+        REFERENCES tasks(id),
+
+    UNIQUE(task_id, date)
 );
 
--- =========================
--- INDICES
--- =========================
-CREATE INDEX idx_fecha_evento 
-ON eventos_tarea(fecha);
 
-CREATE INDEX idx_tarea_evento 
-ON eventos_tarea(id_tarea);
-
-CREATE INDEX idx_tarea_estado 
-ON tareas(id_estado);
-
-CREATE INDEX idx_tarea_categoria 
-ON tareas(id_categoria);
-
--- =========================
--- DATOS DE PRUEBA
--- =========================
-
--- ESTADOS
-INSERT INTO estados (nombre)
+INSERT INTO status (name)
 VALUES
-('Pendiente'),
-('En progreso'),
-('Completada');
+    ('pending'),
+    ('completed'),
+    ('cancelled');
 
--- CATEGORIAS
-INSERT INTO categorias (nombre)
+
+INSERT INTO categories (name)
 VALUES
-('Trabajo'),
-('Personal'),
-('Estudio'),
-('Salud');
-
--- TAREAS
-INSERT INTO tareas (
-    nombre,
-    descripcion,
-    activa,
-    id_estado,
-    id_categoria
-)
-VALUES
-(
-    'Terminar CRUD',
-    'Realizar pruebas completas del CRUD de tareas',
-    1,
-    1,
-    1
-),
-(
-    'Aprender JOINs',
-    'Practicar INNER JOIN y LEFT JOIN en MySQL',
-    1,
-    2,
-    3
-),
-(
-    'Comprar despensa',
-    'Ir al supermercado por comida y productos de limpieza',
-    1,
-    1,
-    2
-),
-(
-    'Hacer ejercicio',
-    'Rutina de cardio y pesas durante 1 hora',
-    1,
-    1,
-    4
-),
-(
-    'Documentar proyecto',
-    'Crear documentación técnica del sistema',
-    1,
-    2,
-    1
-);
-
--- =========================
--- CONSULTA DE PRUEBA
--- =========================
-SELECT 
-    t.id_tarea,
-    t.nombre,
-    t.descripcion,
-    t.activa,
-    e.nombre AS estado,
-    c.nombre AS categoria
-FROM tareas t
-INNER JOIN estados e 
-    ON t.id_estado = e.id_estado
-INNER JOIN categorias c 
-    ON t.id_categoria = c.id_categoria;
+    ('Work'),
+    ('Study'),
+    ('Personal'),
+    ('Health'),
+    ('Gym');
